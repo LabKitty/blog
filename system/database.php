@@ -1,188 +1,151 @@
-<?php
-/**
- * Database functions
- * Not included in class to shorten typing effort.
- */
+-- phpMyAdmin SQL Dump
+-- version 4.2.7.1
+-- http://www.phpmyadmin.net
+--
+-- Host: 127.0.0.1
+-- Generation Time: Sep 08, 2014 at 01:23 PM
+-- Server version: 5.5.39
+-- PHP Version: 5.4.31
 
-connect_db();
-function connect_db()
-{
-	global $db;
-	@$db = new mysqli(DATABASE_HOSTNAME, DATABASE_USERNAME, DATABASE_PASSWORD);
-	if($connection_error = mysqli_connect_error() ){
-		$errors[] = 'There was an error trying to connect to database at '. DATABASE_HOSTNAME . ':<br><b>'.$connection_error.'</b>';
-		require 'templates/error_template.php';
-		die();
-	}
-	mysqli_select_db($db, DATABASE_DATABASE) or error_out('<b>Error:</b><i> '.mysqli_error($db).'</i><br>
-		This usually means that MySQL does not have a database called <b>' . DATABASE_DATABASE.'</b>.<br><br>
-		Create that database and import some structure into it from <b>doc/database.sql</b> file:<br>
-		<ol>
-		<li>Open database.sql</li>
-		<li>Copy all the SQL code</li>
-		<li>Go to phpMyAdmin</li>
-		<li>Create a database called <b>'.DATABASE_DATABASE.'</b></li>
-		<li>Open it and go to <b>SQL</b> tab</li>
-		<li>Paste the copied SQL code</li>
-		<li>Hit <b>Go</b></li>
-		</ol>');
-	mysqli_query($db, "SET NAMES utf8");
-	mysqli_query($db, "SET CHARACTER utf8");
+SET FOREIGN_KEY_CHECKS=0;
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
 
-}
+--
+-- Database: `blog`
+--
 
-function q($sql, & $query_pointer = NULL, $debug = FALSE)
-{
-	global $db;
-	if ($debug) {
-		print "<pre>$sql</pre>";
-	}
-	$query_pointer = mysqli_query($db, $sql) or db_error_out();
-	switch (substr($sql, 0, 6)) {
-		case 'SELECT':
-			exit("q($sql): Please don't use q() for SELECTs, use get_one() or get_first() or get_all() instead.");
-		case 'INSE':
-			debug_print_backtrace();
-			exit("q($sql): Please don't use q() for INSERTs, use insert() instead.");
-		case 'UPDA':
-			exit("q($sql): Please don't use q() for UPDATEs, use update() instead.");
-		default:
-			return mysqli_affected_rows($db);
-	}
-}
+-- --------------------------------------------------------
 
-function get_one($sql, $debug = FALSE)
-{
-	global $db;
+--
+-- Table structure for table `post`
+--
 
-	if ($debug) { // kui debug on TRUE
-		print "<pre>$sql</pre>";
-	}
-	switch (substr($sql, 0, 6)) {
-		case 'SELECT':
-			$q = mysqli_query($db, $sql) or db_error_out();
-			$result = mysqli_fetch_array($q);
-			return empty($result) ? NULL: $result[0];
-		default:
-			exit('get_one("' . $sql . '") failed because get_one expects SELECT statement.');
-	}
-}
+DROP TABLE IF EXISTS `post`;
+CREATE TABLE IF NOT EXISTS `post` (
+`post_id` int(10) unsigned NOT NULL,
+`post_subject` varchar(255) NOT NULL,
+`post_text` text NOT NULL,
+`post_created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+`user_id` int(10) unsigned NOT NULL
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=8 ;
 
-function get_all($sql)
-{
-	global $db;
-	$q = mysqli_query($db, $sql) or db_error_out();
-	while (($result[] = mysqli_fetch_assoc($q)) || array_pop($result)) {
-		;
-	}
-	return $result;
-}
+--
+-- Dumping data for table `post`
+--
 
-function get_first($sql)
-{
-	global $db;
-	$q = mysqli_query($db, $sql) or db_error_out();
-	$first_row = mysqli_fetch_assoc($q);
-	return empty($first_row) ? array() : $first_row;
-}
+INSERT INTO `post` (`post_id`, `post_subject`, `post_text`, `post_created`, `user_id`) VALUES
+(4, 'Juhend', 'Vali Post tabeli Insert (Lisa) vahekaart PhpMyAdminis\r\nTäida väljad (post_id välja täitma ei pea, sest meil on AUTO_INCREMENT peal).\r\n', '2014-09-04 12:15:39', 1),
+(5, 'Anomaalia', 'onorkoodi:\r\nGuugelda bootstrap snippets (leiad ühe saidi)\r\nKasuta saidi otsingut ja otsi märksõna blog järgi postituste loendamiseks sobiv vaade ehk snippet (Simple blog lay', '2014-09-04 12:15:39', 1),
+(6, 'Juhend', 'Vali Post tabeli Insert (Lisa) vahekaart PhpMyAdminis\r\nTäida väljad (post_id välja täitma ei pea, sest meil on AUTO_INCREMENT peal).\r\n', '2014-09-04 12:15:56', 1),
+(7, 'Anomaalia', 'onorkoodi:\r\nGuugelda bootstrap snippets (leiad ühe saidi)\r\nKasuta saidi otsingut ja otsi märksõna blog järgi postituste loendamiseks sobiv vaade ehk snippet (Simple blog lay', '2014-09-04 12:15:56', 1);
 
-function db_error_out()
-{
-	global $db;
-	$db_error = mysqli_error($db);
+-- --------------------------------------------------------
 
-	if (strpos($db_error, 'You have an error in SQL syntax') !== FALSE) {
-		$db_error = '<b>Syntax error in</b><pre> ' . substr($db_error, 135) . '</pre>';
+--
+-- Table structure for table `post_tags`
+--
 
-	}
-	$backtrace = debug_backtrace();
-	$file = $backtrace[0]['file'];
-	$line = $backtrace[0]['line'];
-	$function = isset($backtrace[2]['function']) ? $backtrace[2]['function'] : NULL;
-	$args = isset($backtrace[2]['args']) ? $backtrace[2]['args'] : NULL;
-	if (!empty($args)) {
-		foreach ($args as $arg) {
-			if (is_array($arg)) {
-				$args2[] = implode(',', $arg);
-			} else {
-				$args2[] = $arg;
-			}
-		}
-	}
+DROP TABLE IF EXISTS `post_tags`;
+CREATE TABLE IF NOT EXISTS `post_tags` (
+`post_id` int(10) unsigned NOT NULL,
+`tag_id` int(10) unsigned NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-	$args = empty($args2) ? '' : '"' . implode('", "', $args2) . '"';
-	$s = "In file <b>$file</b>, line <b>$line</b>";
-	if (!empty($function)) {
-		$s .= ", function <b>$function</b>( $args )";
-	}
+-- --------------------------------------------------------
 
-	// Display <pre>SQL QUERY</pre> only if it is set
-	$sql = isset($sql) ? '<pre style="text-align: left;">' . $sql . '</pre><br/>' : '';
+--
+-- Table structure for table `tag`
+--
 
-	$output = '<h2><strong style="color: red">' . $db_error . '</strong></h2><br/>' . $sql . '<p>' . $s . '</p>';
+DROP TABLE IF EXISTS `tag`;
+CREATE TABLE IF NOT EXISTS `tag` (
+`tag_id` int(10) unsigned NOT NULL,
+`tag_name` varchar(225) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
-	if (isset($_GET['ajax'])) {
-		ob_end_clean();
-		echo strip_tags($output);
-	} else {
-		$errors[] = $output;
-		require 'templates/error_template.php';
-	}
-	die();
+-- --------------------------------------------------------
 
-}
+--
+-- Table structure for table `user`
+--
 
-/**
- * @param $table string The name of the table to be inserted into.
- * @param $data array Array of data. For example: array('field1' => 'mystring', 'field2' => 3);
- * @return bool|int Returns the ID of the inserted row or FALSE when fails.
- */
-function insert($table, $data)
-{
-	global $db;
-	if ($table and is_array($data) and !empty($data)) {
-		$values = implode(',', escape($data));
-		$sql = "INSERT INTO `{$table}` SET {$values} ON DUPLICATE KEY UPDATE {$values}";
-		$q = mysqli_query($db, $sql)or db_error_out();
-		$id = mysqli_insert_id($db);
-		return ($id > 0) ? $id : FALSE;
-	} else {
-		return FALSE;
-	}
-}
+DROP TABLE IF EXISTS `user`;
+CREATE TABLE IF NOT EXISTS `user` (
+`user_id` int(10) unsigned NOT NULL,
+`username` varchar(25) NOT NULL,
+`password` varchar(255) NOT NULL,
+`deleted` tinyint(3) unsigned NOT NULL DEFAULT '0'
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
-function update($table, array $data, $where)
-{
-	global $db;
-	if ($table and is_array($data) and !empty($data)) {
-		$values = implode(',', escape($data));
+--
+-- Dumping data for table `user`
+--
 
-		if (isset($where)) {
-			$sql = "UPDATE `{$table}` SET {$values} WHERE {$where}";
-		} else {
-			$sql = "UPDATE `{$table}` SET {$values}";
-		}
-		$id = mysqli_query($db, $sql) or db_error_out();
-		return ($id > 0) ? $id : FALSE;
-	} else {
-		return FALSE;
-	}
-}
+INSERT INTO `user` (`user_id`, `username`, `password`, `deleted`) VALUES
+(1, 'demo', 'demo', 0);
 
-function escape(array $data)
-{
-	global $db;
-	$values = array();
-	if (!empty($data)) {
-		foreach ($data as $field => $value) {
-			if ($value === NULL) {
-				$values[] = "`$field`=NULL";
-			} elseif (is_array($value) && isset($value['no_escape'])) {
-				$values[] = "`$field`=" . mysqli_real_escape_string($db, $value['no_escape']);
-			} else {
-				$values[] = "`$field`='" . mysqli_real_escape_string($db, $value) . "'";
-			}
-		}
-	}
-	return $values;
-}
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `post`
+--
+ALTER TABLE `post`
+ADD PRIMARY KEY (`post_id`), ADD KEY `user_id` (`user_id`);
+
+--
+-- Indexes for table `post_tags`
+--
+ALTER TABLE `post_tags`
+ADD PRIMARY KEY (`post_id`,`tag_id`), ADD KEY `tag_id` (`tag_id`);
+
+--
+-- Indexes for table `tag`
+--
+ALTER TABLE `tag`
+ADD PRIMARY KEY (`tag_id`);
+
+--
+-- Indexes for table `user`
+--
+ALTER TABLE `user`
+ADD PRIMARY KEY (`user_id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `post`
+--
+ALTER TABLE `post`
+MODIFY `post_id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=8;
+--
+-- AUTO_INCREMENT for table `tag`
+--
+ALTER TABLE `tag`
+MODIFY `tag_id` int(10) unsigned NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `user`
+--
+ALTER TABLE `user`
+MODIFY `user_id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `post`
+--
+ALTER TABLE `post`
+ADD CONSTRAINT `post_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
+
+--
+-- Constraints for table `post_tags`
+--
+ALTER TABLE `post_tags`
+ADD CONSTRAINT `post_tags_ibfk_1` FOREIGN KEY (`post_id`) REFERENCES `post` (`post_id`),
+ADD CONSTRAINT `post_tags_ibfk_2` FOREIGN KEY (`tag_id`) REFERENCES `tag` (`tag_id`);
+SET FOREIGN_KEY_CHECKS=1;
