@@ -1,5 +1,6 @@
 <?php
 class posts extends Controller{
+    public $requires_auth = true;
     function index(){
         $this->posts = get_all("SELECT * FROM post");
         $_tags = get_all("SELECT * FROM post_tags NATURAL JOIN tag");
