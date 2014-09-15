@@ -63,9 +63,8 @@
 				</li>
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
-				<li><a href="../navbar/">Default</a></li>
-				<li><a href="../navbar-static-top/">Static top</a></li>
-				<li class="active"><a href="./">Fixed top</a></li>
+                 <li><a href="<?= BASE_URL ?><?= $auth->logged_in == true? 'Logout' : 'Login' ?>"><?=$auth->logged_in == true? 'Logout' : 'Login' ?></a></li>
+
 			</ul>
 		</div><!--/.nav-collapse -->
 	</div>
@@ -76,6 +75,7 @@
 	<!-- Main component for a primary marketing message or call to action -->
 	<? if( !file_exists("views/$controller/{$controller}_$action.php")) error_out('The view <i>views/'. $controller . '/' .  $controller . '_' . $action . '.php</i> does not exist. Create that file.');?>
     <?  @require "views/$controller/{$controller}_$action.php"; ?>
+
 
 </div> <!-- /container -->
 
