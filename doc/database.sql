@@ -3,9 +3,9 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 15, 2014 at 10:37 AM
--- Server version: 5.5.39
--- PHP Version: 5.4.31
+-- Generation Time: Oct 20, 2014 at 08:21 AM
+-- Server version: 5.6.20
+-- PHP Version: 5.5.15
 
 SET FOREIGN_KEY_CHECKS=0;
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
@@ -23,22 +23,22 @@ SET time_zone = "+00:00";
 
 DROP TABLE IF EXISTS `comment`;
 CREATE TABLE IF NOT EXISTS `comment` (
-`comment_id` int(11) unsigned NOT NULL,
-  `comment_author` varchar(255) NOT NULL,
-  `comment_created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+`comment_id` int(10) unsigned NOT NULL,
   `comment_text` text NOT NULL,
-  `post_id` int(11) unsigned NOT NULL
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+  `comment_author` varchar(50) NOT NULL,
+  `comment_created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `post_id` int(10) unsigned NOT NULL
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=17 ;
 
 --
 -- Dumping data for table `comment`
 --
 
-INSERT INTO `comment` (`comment_id`, `comment_author`, `comment_created`, `comment_text`, `post_id`) VALUES
-(1, 'Lolita', '2014-09-15 07:59:18', 'Hea teada, et selline asi on olemas.', 4),
-(2, 'Meelike', '2014-09-15 07:59:18', 'Hea teada, et selline asi on olemas. :3', 5),
-(3, 'Lolita', '2014-09-15 07:59:20', 'Hea teada, et selline asi on olemas.', 4),
-(4, 'Meelike', '2014-09-15 07:59:20', 'Hea teada, et selline asi on olemas. :3', 5);
+INSERT INTO `comment` (`comment_id`, `comment_text`, `comment_author`, `comment_created`, `post_id`) VALUES
+(1, 'Thanks for expressing your thoughts. Door-to-door marketing can be effective too in many cases, especially when there’s a tradition in doing it properly. In my personal opinion, a business blog can bring a lot of advantages too, but one has to evaluate if their business could benefit from it. I wish you good luck.', 'Anonymouse', '2014-09-10 11:39:47', 1),
+(13, 'Reference site about Lorem Ipsum, giving information on its origins, as well as a random Lipsum generator.', 'Anonymouse', '2014-10-20 05:50:25', 1),
+(14, 'Lorem Ipsum, giving information on its origins, as', 'Anonymouse', '2014-10-20 06:09:57', 1),
+(15, 'You mention here some great points that’s highlights the important of a business website blog. Currently, i’m working as Online Marketing Executive for a local software company. But they mostly believe in traditional marketing (Door-to-Door Marketing) and they believe traditional marketing is the best.', 'Anonymouse', '2014-10-20 06:20:03', 4);
 
 -- --------------------------------------------------------
 
@@ -53,16 +53,18 @@ CREATE TABLE IF NOT EXISTS `post` (
   `post_text` text NOT NULL,
   `post_created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `user_id` int(10) unsigned NOT NULL
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=8 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=9 ;
 
 --
 -- Dumping data for table `post`
 --
 
 INSERT INTO `post` (`post_id`, `post_subject`, `post_text`, `post_created`, `user_id`) VALUES
-(4, 'Juhend', 'Vali Post tabeli Insert (Lisa) vahekaart PhpMyAdminis\r\nTäida väljad (post_id välja täitma ei pea, sest meil on AUTO_INCREMENT peal).\r\n', '2014-09-04 12:15:39', 1),
-(5, 'Anomaalia', 'onorkoodi:\r\nGuugelda bootstrap snippets (leiad ühe saidi)\r\nKasuta saidi otsingut ja otsi märksõna blog järgi postituste loendamiseks sobiv vaade ehk snippet (Simple blog lay', '2014-09-04 12:15:39', 1),
-(6, 'Maalimine', 'Vali Post tabeli Insert (Lisa) vahekaart PhpMyAdminis\r\nTäida väljad (post_id välja täitma ei pea, sest meil on AUTO_INCREMENT peal).\r\n', '2014-09-04 12:15:56', 1);
+(1, 'Top Five Things to Learn from the Greggs vs Google Twitter Debacle', 'This is a guest contribution from Mark Potter. Greggs is the UK’s largest bakery chain, famed for its sausage rolls and steak bakes. They have always enjoyed a strong social media presence, winning a Digital Impact Award in 2013 for a ‘Sandwich Maker’ Facebook app. As a relatively low-budget food chain, they are a popular', '2014-09-04 11:42:53', 1),
+(2, 'Be a Better Blogger by Doing as Little as Possible', 'When you make the decision to grow your blog and hopefully create an income from it, it can be so easy to fall into the trap of doing everything all at once in the name of getting as much exposure as you can. You’re blogging every day, you’re promoting those posts to your Facebook, Twitter', '2014-09-04 11:42:59', 1),
+(4, 'How Blogging In College Got Me My First Job', 'This is a guest contribution from PR specialist Caitlin Dodds. I remember sitting alone in the airport with three hours to kill before my flight to Madrid. Squirming on the hard plastic chairs at my boarding gate with my laptop perched on my knees, I typed my first post on my new study abroad blog', '2014-09-17 13:13:58', 1),
+(5, 'Your Blog as Part of an Overarching Business Strategy', 'This is a guest contribution from Sabina Stoiciu. So you have a business blog (you DO have a blog for your business, yes?). Well it’s a great decision, and a decision that is growing in popularity. In a 2012 HubSpot study, 62% of respondents claimed to run a company blog. A number which has consistently grown', '2014-09-17 13:47:42', 1),
+(8, '10 Things I Wish I Knew About Blogging: Webinar', 'In 2002 I stumbled upon an article about ‘Blogging’. I didn’t know it at the time but that moment changed my life. Read more about Darren or contact him. Connect with me on Twitter at , Facebook, Google+ and LinkedIn', '2014-09-22 12:31:13', 3);
 
 -- --------------------------------------------------------
 
@@ -72,8 +74,8 @@ INSERT INTO `post` (`post_id`, `post_subject`, `post_text`, `post_created`, `use
 
 DROP TABLE IF EXISTS `post_tags`;
 CREATE TABLE IF NOT EXISTS `post_tags` (
-  `post_id` int(10) unsigned NOT NULL,
-  `tag_id` int(10) unsigned NOT NULL
+  `post_id` int(11) unsigned NOT NULL,
+  `tag_id` int(11) unsigned NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -81,10 +83,10 @@ CREATE TABLE IF NOT EXISTS `post_tags` (
 --
 
 INSERT INTO `post_tags` (`post_id`, `tag_id`) VALUES
-(4, 1),
-(4, 2),
-(5, 2),
-(6, 2);
+(1, 1),
+(2, 2),
+(4, 5),
+(5, 8);
 
 -- --------------------------------------------------------
 
@@ -95,16 +97,19 @@ INSERT INTO `post_tags` (`post_id`, `tag_id`) VALUES
 DROP TABLE IF EXISTS `tag`;
 CREATE TABLE IF NOT EXISTS `tag` (
 `tag_id` int(10) unsigned NOT NULL,
-  `tag_name` varchar(225) NOT NULL
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+  `tag_name` varchar(25) NOT NULL
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=9 ;
 
 --
 -- Dumping data for table `tag`
 --
 
 INSERT INTO `tag` (`tag_id`, `tag_name`) VALUES
-(1, 'yolo'),
-(2, 'semester');
+(1, 'lillepood'),
+(2, 'sitt'),
+(4, 'Test'),
+(5, 'technology'),
+(8, 'flower');
 
 -- --------------------------------------------------------
 
@@ -116,17 +121,17 @@ DROP TABLE IF EXISTS `user`;
 CREATE TABLE IF NOT EXISTS `user` (
 `user_id` int(10) unsigned NOT NULL,
   `username` varchar(25) NOT NULL,
-  `email` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
-  `active` tinyint(3) unsigned NOT NULL DEFAULT '0'
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+  `deleted` tinyint(3) unsigned NOT NULL DEFAULT '0'
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
 
 --
 -- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`user_id`, `username`, `email`, `password`, `active`) VALUES
-(1, 'demo', '', 'demo', 0);
+INSERT INTO `user` (`user_id`, `username`, `password`, `deleted`) VALUES
+(1, 'demo', 'demo', 0),
+(3, 'lilleke', '1234', 0);
 
 --
 -- Indexes for dumped tables
@@ -160,7 +165,7 @@ ALTER TABLE `tag`
 -- Indexes for table `user`
 --
 ALTER TABLE `user`
- ADD PRIMARY KEY (`user_id`), ADD UNIQUE KEY `username` (`username`);
+ ADD PRIMARY KEY (`user_id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -170,22 +175,22 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `comment`
 --
 ALTER TABLE `comment`
-MODIFY `comment_id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
+MODIFY `comment_id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=17;
 --
 -- AUTO_INCREMENT for table `post`
 --
 ALTER TABLE `post`
-MODIFY `post_id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=8;
+MODIFY `post_id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=9;
 --
 -- AUTO_INCREMENT for table `tag`
 --
 ALTER TABLE `tag`
-MODIFY `tag_id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
+MODIFY `tag_id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=9;
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-MODIFY `user_id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
+MODIFY `user_id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
 --
 -- Constraints for dumped tables
 --
@@ -208,4 +213,10 @@ ADD CONSTRAINT `post_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id
 ALTER TABLE `post_tags`
 ADD CONSTRAINT `post_tags_ibfk_1` FOREIGN KEY (`post_id`) REFERENCES `post` (`post_id`),
 ADD CONSTRAINT `post_tags_ibfk_2` FOREIGN KEY (`tag_id`) REFERENCES `tag` (`tag_id`);
+
+--
+-- Constraints for table `tag`
+--
+ALTER TABLE `tag`
+ADD CONSTRAINT `tag_ibfk_1` FOREIGN KEY (`tag_id`) REFERENCES `post` (`post_id`);
 SET FOREIGN_KEY_CHECKS=1;
