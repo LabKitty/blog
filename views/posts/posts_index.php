@@ -6,10 +6,10 @@
     <span class="badge badge-success"><?=$post["post_created"]?></span>
         <span class="badge badge-success"><?=$post["post_author"]?></span>
             <div class="pull-right">
-                <?foreach ($tags[$post['post_id']] as $tag):?>
-                     <a href="#"><span class="label" style="background-color: #5bc0de"><?=$tag?></span></a>
-                <?endforeach?>
-             </div>
+                <?foreach($tags[$post['post_id']] as $tag):?>
+                    <a href="<?= BASE_URL ?>tags/<?= $tags['tag_id'] ?>"> <span class="label" style="background-color: #5bc0de"><?=$tag?></span></a>
+                <? endforeach?>
+            </div>
     </div>
     </div>
 <? endforeach ?>
