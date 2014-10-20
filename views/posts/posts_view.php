@@ -34,6 +34,7 @@
                 </div>
             </li>
         </ul>
+<? endforeach ?> 
         <form class="form-inline" method="post" role="form">
             <div class="form-group">
                 <input class="form-control" type="text" placeholder="Your comments" name="data[comment_text]"/>
@@ -43,5 +44,5 @@
             </div>
         </form>
     </div>
-<? endforeach ?>
+
 
