@@ -39,7 +39,7 @@ class posts extends Controller{
     {
         $data = $_POST['data'];
         $data['post_id'] = $this->params[0];
-        $data['comment_author'] = $_SESSION['user_id'];
+        $data['comment_author'] = 'Anonymouse';
         INSERT('comment',$data);
     }
 
